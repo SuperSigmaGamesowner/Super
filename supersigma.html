@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>𝕊𝕦𝕡𝕖𝕣 𝕊𝕚𝕘𝕞𝕒 𝔾𝕒𝕞𝕖𝕤™</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow: hidden;
+            position: relative;
+            animation: gradientAnimation 10s infinite alternate;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background: linear-gradient(45deg, #ff007f, #00ff7f); }
+            25% { background: linear-gradient(45deg, #00ff7f, #007fff); }
+            50% { background: linear-gradient(45deg, #007fff, #ff7f00); }
+            75% { background: linear-gradient(45deg, #ff7f00, #ff00ff); }
+            100% { background: linear-gradient(45deg, #ff00ff, #ff007f); }
+        }
+
+        h1 {
+            font-size: 3em;
+            text-align: center;
+            margin: 20px 0;
+            text-shadow: 
+                1px 1px 0 red, 
+                2px 2px 0 orange, 
+                3px 3px 0 yellow, 
+                4px 4px 0 green, 
+                5px 5px 0 blue, 
+                6px 6px 0 purple;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .word {
+            font-size: 2em;
+            margin: 20px;
+            padding: 10px 20px;
+            border: 2px solid #00ffcc;
+            border-radius: 5px;
+            text-align: center; 
+            white-space: normal;
+            max-width: 90%; 
+            background-color: rgba(0, 0, 0, 0.5);
+            transition: transform 0.5s, opacity 0.5s;
+            z-index: 10;
+            position: relative;
+        }
+
+        .status-container {
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            margin: 20px 0; 
+        }
+
+        #battery-status, #current-time {
+            font-size: 24px;
+            color: #FFFF00; /* Change color for visibility */
+            margin: 0 10px; /* Add some space between the elements */
+        }
+
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 1px;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white; /* Changed to white for better contrast */
+            background-color: #007bff; /* Set the button's background color to a shade of blue */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: rgbGlow 1.5s infinite alternate;
+        }
+
+        @keyframes rgbGlow {
+            0% { box-shadow: 0 0 5px rgba(255, 0, 255, 0.7); }
+            25% { box-shadow: 0 0 10px rgba(0, 255, 0, 0.7); }
+            50% { box-shadow: 0 0 15px rgba(0, 0, 255, 0.7); }
+            75% { box-shadow: 0 0 20px rgba(255, 255, 0, 0.7); }
+            100% { box-shadow: 0 0 25px rgba(255, 0, 0, 0.7); }
+        }
+
+        button:hover {
+            background-color: #00ffcc;
+            color: #000;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(128, 128, 128, 0.5), 0 0 40px rgba(128, 128, 128, 0.3);
+        }
+
+        /* Loading screen styles */
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            flex-direction: column;
+        }
+
+        #second-loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            flex-direction: column;
+        }
+
+        .loader {
+            border: 8px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 8px solid #ffffff;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Chat Box Styles */
+        #chat-box {
+            display: none; /* Initially hidden */
+            position: fixed; /* Change to fixed for full screen */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ffcc;
+            z-index: 1000;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* New CSS for zapier-interfaces-chatbot-embed */
+        .zapier-interfaces-chatbot-embed {
+            display: block; /* Ensure it is displayed */
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 95%;
+            width: 100%;
+            border: none;
+        }
+
+        /* Style for the chat button */
+        #chat-button-circle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: #007bff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        /* Particles.js canvas styling */
+        #particles-js {
+            position: absolute;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1; /* Ensure it is behind other content */
+        }
+
+        .visitor-counter {
+            position: absolute; /* Set to absolute positioning */
+            top: 10px; /* Position it at the top */
+            left: 10px; /* Position it to the left */
+            color: white; /* Color for visibility */
+            z-index: 1000; /* Ensure it's above other elements */
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div> <!-- Particles.js canvas -->
+    <div id="loading">
+        <div class="loader"></div>
+        <span class="loading-text">𝕊𝕦𝕡𝕖𝕣 𝕊𝕚𝕘𝕞𝕒 𝕃𝕒𝕦𝕟𝕔𝕙𝕖𝕣 𝕚𝕤 𝕃𝕠𝕒𝕕𝕚𝕟𝕘. . .</span>
+     </div>
+    <div id="second-loading">
+        <div class="loader"></div>
+        <span class="loading-text">ℂ𝕙𝕖𝕔𝕜𝕚𝕟𝕘 ℂ𝕠𝕟𝕟𝕖𝕔𝕥𝕚𝕠𝕟...</span>
+    </div>
+
+    <h1>𝕊𝕦𝕡𝕖𝕣 𝕊𝕚𝕘𝕞𝕒 𝔾𝕒𝕞𝕖𝕤™️</h1>
+    <h2>𝔸𝕝𝕨𝕒𝕪𝕤 𝕊𝕚𝕘𝕞𝕒 Σ 𝕪𝕠𝕦𝕣 𝕨𝕒𝕪 𝕥𝕙𝕣𝕠𝕦𝕘𝕙</h2>
+
+    <div class="word" id="randomWord">𝕎𝕖𝕝𝕔𝕠𝕞𝕖 𝕥𝕠 𝕊𝕦𝕡𝕖𝕣 𝕊𝕚𝕘𝕞𝕒 𝔾𝕒𝕞𝕖𝕤™️</div>
+
+    <div class="status-container">
+        <div id="battery-status">Battery Percentage: Loading...</div>
+        <div id="current-time">Current Time: Loading...</div>
+    </div>
+
+    <div class="buttons">
+        <button onclick="window.open('https://sites.google.com/k12.friscoisd.org/super-sigma-games/about/newsletter', '_blank')"><span>ℕ𝕖𝕨𝕤𝕝𝕖𝕥𝕥𝕖𝕣 📜</span></button>
+        <button onclick="window.open('https://sites.google.com/k12.friscoisd.org/super-sigma-games/about/rules', '_blank')"><span>ℝ𝕦𝕝𝕖𝕤</span></button>
+        <button onclick="window.open('https://sites.google.com/k12.friscoisd.org/super-sigma-games/about/contact-socials', '_blank')"><span>ℂ𝕠𝕟𝕥𝕒𝕔𝕥/𝕊𝕠𝕔𝕚𝕒𝕝𝕤</span></button>
+        <button onclick="window.open('https://sites.google.com/k12.friscoisd.org/super-sigma-games/seasonal-games', '_blank')"><span>𝕊𝕖𝕒𝕤𝕠𝕟𝕒𝕝 𝔾𝕒𝕞𝕖𝕤</span></button>
+        <button onclick="window.open('https://sites.google.com/k12.friscoisd.org/super-sigma-games/tools', '_blank')"><span>𝕊𝕦𝕡𝕖𝕣 𝕊𝕚𝕘𝕞𝕒 𝕋𝕠𝕠𝕝𝕤 💎</span></button>
+        <button onclick="window.open('https://sites.google.com/k12.friscoisd.org/super-sigma-games/proxiesapps', '_blank')"><span>ℙ𝕣𝕠𝕩𝕚𝕖𝕤/𝔸𝕡𝕡𝕤 📱</span></button>
+        <button onclick="window.open('https://sites.google.com/k12.friscoisd.org/super-sigma-games/events/20k-visitors-event', '_blank')"><span>𝟚𝟘𝕜 𝕍𝕚𝕤𝕚𝕥𝕠𝕣𝕤 𝔼𝕧𝕖𝕟𝕥 ❤</span></button>
+        <button onclick="window.open('https://sites.google.com/k12.friscoisd.org/super-sigma-games/games', '_blank')"><span>𝔾𝕒𝕞𝕖𝕤 🎮</span></button>
+        <button onclick="window.open('https://sites.google.com/k12.friscoisd.org/super-sigma-games/arcade', '_blank')"><span>𝕊𝕦𝕡𝕖𝕣 𝕊𝕚𝕘𝕞𝕒 𝔸𝕣𝕔𝕒𝕕𝕖™ 🕹</span></button>
+        <button onclick="window.open('https://video.freetv.com/app', '_blank')"><span>𝕄𝕠𝕧𝕚𝕖𝕤 🍿</span></button>
+        <button onclick="window.open('https://sites.google.com/k12.friscoisd.org/super-sigma-games/tools/chatroom', '_blank')"><span>𝕊𝕦𝕡𝕖𝕣 𝕊𝕚𝕘𝕞𝕒 ℂ𝕙𝕒𝕥™</span></button>
+        <button onclick="window.open('https://sites.google.com/k12.friscoisd.org/super-sigma-games/about', '_blank')"><span>𝔸𝕓𝕠𝕦𝕥</span></button>
+        <button onclick="window.open('https://sites.google.com/k12.friscoisd.org/super-sigma-games/coding', '_blank')"><span>ℂ𝕠𝕕𝕚𝕟𝕘 🧑‍💻</span></button>
+        <button onclick="window.open('https://sites.google.com/k12.friscoisd.org/super-sigma-games/tools/super-sigma-ai', '_blank')"><span>𝕊𝕦𝕡𝕖𝕣 𝕊𝕚𝕘𝕞𝕒 𝔸𝕀 🤖</span></button>
+    </div>
+
+    <div id="chat-box">
+        <div class="zapier-interfaces-chatbot-embed">
+            <iframe src='https://interfaces.zapier.com/embed/chatbot/cm5x9xu54001f7o9de3osx4m7' height='100%' width='100%' allow='clipboard-write *' style="border: none;"></iframe>
+        </div>
+    </div>
+
+    <button id="chat-button-circle" onclick="toggleChat()">💬</button>
+    <div class="visitor-counter">
+        <a href='http://www.freevisitorcounters.com'>ℝ𝕚𝕫𝕫𝕝𝕖𝕣𝕤 😎😏</a>
+        <script type='text/javascript' src='https://www.freevisitorcounters.com/auth.php?id=c46ee3753d804511d41f6b6dfb6738a02a17fc31'></script>
+        <script type="text/javascript" src="https://www.freevisitorcounters.com/en/home/counter/1233799/t/0"></script>
+    </div>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Particle.js configuration
+        particlesJS("particles-js", {
+            particles: {
+                number: {
+                    value: 80,
+                    density: {
+                        enable: true,
+                        value_area: 800
+                    }
+                },
+                color: {
+                    value: "#ffffff"
+                },
+                shape: {
+                    type: "circle",
+                    stroke: {
+                        width: 0,
+                        color: "#000000"
+                    },
+                    polygon: {
+                        nb_sides: 5
+                    },
+                    image: {
+                        src: "img/github.svg",
+                        width: 100,
+                        height: 100
+                    }
+                },
+                opacity: {
+                    value: 0.5,
+                    random: false,
+                    anim: {
+                        enable: false,
+                        speed: 1,
+                        opacity_min: 0.1,
+                        sync: false
+                    }
+                },
+                size: {
+                    value: 5,
+                    random: true,
+                    anim: {
+                        enable: false,
+                    speed: 40,
+                    size_min: 0.1,
+                    sync: false
+                }
+            },
+            line_linked: {
+                enable: true,
+                distance: 150,
+                color: "#ffffff",
+                opacity: 0.4,
+                width: 1
+            },
+            move: {
+                enable: true,
+                speed: 6,
+                direction: "none",
+                random: false,
+                straight: false,
+                out_mode: "out",
+                bounce: false,
+                attract: {
+                    enable: false,
+                    rotateX: 600,
+                    rotateY: 1200
+                }
+            }
+        },
+        interactivity: {
+            detect_on: "canvas",
+            events: {
+                onhover: {
+                    enable: true,
+                    mode: "repulse"
+                },
+                onclick: {
+                    enable: true,
+                    mode: "push"
+                },
+                resize: true
+            },
+            modes: {
+                grab: {
+                    distance: 400,
+                    line_linked: {
+                        opacity: 1
+                    }
+                },
+                bubble: {
+                    distance: 400,
+                    size: 40,
+                    duration: 2,
+                    opacity: 8,
+                    speed: 3
+                },
+                repulse: {
+                    distance: 200,
+                    duration: 0.4
+                },
+                push: {
+                    particles_nb: 4
+                },
+                remove: {
+                    particles_nb: 2
+                }
+            }
+        },
+        retina_detect: true
+    });
+
+    // Toggle chat box visibility
+    function toggleChat() {
+        const chatBox = document.getElementById('chat-box');
+        chatBox.style.display = chatBox.style.display === 'none' || chatBox.style.display === '' ? 'block' : 'none';
+    }
+
+    // Fetch battery status and update time
+if ('getBattery' in navigator) {
+    navigator.getBattery().then(function(battery) {
+        const batteryStatusDiv = document.getElementById('battery-status');
+        const currentTimeDiv = document.getElementById('current-time');
+
+        function updateBatteryStatus() {
+            batteryStatusDiv.textContent = `Battery Percentage: ${Math.round(battery.level * 100)}%`;
+        }
+
+        function updateTime() {
+            const now = new Date();
+            currentTimeDiv.textContent = `Current Time: ${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}`;
+        }
+
+        updateBatteryStatus();
+        battery.addEventListener('levelchange', updateBatteryStatus);
+
+        // Update time every second
+        setInterval(updateTime, 1000);
+        updateTime(); // Initial call
+    }).catch(function(error) {
+        console.error("Battery API not supported or error occurred:", error);
+        document.getElementById('battery-status').textContent = "Battery Percentage: Not available";
+    });
+} else {
+    document.getElementById('battery-status').textContent = "Battery Percentage: Not available";
+}
+
+// Automatically change the word every 2 seconds
+const words = [
+    "Sigma", "Huge new update!", "Stay Updated with our site!", "Rizzler", "Enjoy your stay", "Skibidi", "Use our Tools 🔧", "Alpha", "My Favorite Website 😍", "Super Sigma Music is out!", "New arcade games! Check it out",
+    "Beta", "Him", "𝕎 𝕊𝕦𝕡𝕖𝕣 𝕊𝕚𝕘𝕞𝕒 ℕ𝕖𝕩𝕥𝕘𝕖𝕟 𝔸𝕀", "Mewing Streak", "Follow Our Channel", "Check the Newsletter", 
+    "Phonk", "Ohio fanum tax", "main character", "Why is this here", "Subscribe to our youtube!", "I love this 😍"
+];
+
+function generateRandomWord() {
+    const wordDisplay = document.getElementById('randomWord');
+
+    // Start shrinking effect
+    wordDisplay.style.transform = 'scale(0)';
+    wordDisplay.style.opacity = '0';
+
+    // After the shrink animation, change the word
+    setTimeout(() => {
+        const randomIndex = Math.floor(Math.random() * words.length);
+        wordDisplay.innerText = words[randomIndex];
+
+        // Start growing effect
+        wordDisplay.style.transform = 'scale(1)';
+        wordDisplay.style.opacity = '1';
+    }, 500); // Wait for half a second for the shrink animation to complete
+}
+
+// Automatically change the word every 2 seconds
+setInterval(generateRandomWord, 2000); // Change word every 2 seconds
+
+// Hide loading screen on page load
+window.onload = function() {
+    document.getElementById('loading').style.display = 'none'; // Hide the first loading screen
+
+    // Show the second loading screen for a brief moment
+    const secondLoading = document.getElementById('second-loading');
+    secondLoading.style.display = 'flex'; // Show the second loading screen
+
+    // Hide the second loading screen after 300 milliseconds
+    setTimeout(() => {
+        secondLoading.style.display = 'none'; // Hide the second loading screen
+    }, 300); // Change this duration as needed
+};
+</script>
+</body>
+</html>
